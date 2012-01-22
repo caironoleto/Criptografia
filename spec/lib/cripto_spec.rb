@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cripto'
 
 describe Cripto do
   before(:each) do
