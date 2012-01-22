@@ -1,10 +1,10 @@
 require 'spec_helper'
+require 'dictionary'
 require 'cripto'
 
 describe Cripto do
-  before(:each) do
-    @dicionario = {
-    'a' => 'b',
+  let(:definition) do
+    {'a' => 'b',
     'b' => 'c',
     'c' => 'd',
     'd' => 'e',
@@ -57,40 +57,70 @@ describe Cripto do
     'X' => 'Y',
     'Y' => 'Z',
     'Z' => 'A',
-   
     ' ' => '.',
     '.' => ' ',
-    }
+    } 
   end
-    
-  describe 'Criptografa' do
-    it 'deve mostrar o dicionario' do
-      cripto = Cripto.new
-      cripto.dicionario.should == @dicionario
+
+  let(:dictionary) { Dictionary.new(definition) }
+
+  subject do 
+    Cripto.new(dictionary)
+  end
+
+  describe 'encrypt' do
+    it do
+      subject.encrypt("Dojo").should == "Epkp"
+      subject.encrypt("Dado").should == "Ebep"
+      subject.encrypt("Dojo Dado").should == "Epkp.Ebep"
     end
     
-    it "deve criptografar uma string" do
-      Cripto.new("Dojo").cripto.should == "Epkp"
-      Cripto.new("Dado").cripto.should == "Ebep"
-      Cripto.new("Dojo Dado").cripto.should == "Epkp.Ebep"
+    it "should only replace string on the dictionary" do
+       subject.encrypt("Dado!?#").should == "Ebep!?#"
     end
-    
-    it "deve nao substituir caracteres fora do dicionario" do
-       Cripto.new("Dado!?#").cripto.should == "Ebep!?#"
+
+    describe "with a Hash dictionary" do
+      subject do
+        Cripto.new(definition)
+      end
+
+      it do
+        subject.encrypt("Dojo").should == "Epkp"
+        subject.encrypt("Dado").should == "Ebep"
+        subject.encrypt("Dojo Dado").should == "Epkp.Ebep"
+      end
+      
+      it "should only replace string on the dictionary" do
+         subject.encrypt("Dado!?#").should == "Ebep!?#"
+      end
     end
-    
   end
   
-  describe 'Descriptografar' do
-    it 'descriptografar a string' do
-      Cripto.new("Epkp").decript.should == "Dojo"
-      Cripto.new("Ebep").decript.should == "Dado"
-      Cripto.new("Epkp.Ebep").decript.should == "Dojo Dado"
+  describe 'decrypt' do
+    it do
+      subject.decrypt("Epkp").should == "Dojo"
+      subject.decrypt("Ebep").should == "Dado"
+      subject.decrypt("Epkp.Ebep").should == "Dojo Dado"
     end
     
-    it "deve nao substituir caracteres fora do dicionario" do
-       Cripto.new("Ebep!?#").decript.should == "Dado!?#"
+    it "should only replace string on the dictionary" do
+       subject.decrypt("Ebep!?#").should == "Dado!?#"
+    end
+
+    describe "with a Hash dictionary" do
+      subject do
+        Cripto.new(definition)
+      end
+
+      it do
+        subject.decrypt("Epkp").should == "Dojo"
+        subject.decrypt("Ebep").should == "Dado"
+        subject.decrypt("Epkp.Ebep").should == "Dojo Dado"
+      end
+      
+      it "should only replace string on the dictionary" do
+         subject.decrypt("Ebep!?#").should == "Dado!?#"
+      end
     end
   end
 end
-

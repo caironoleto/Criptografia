@@ -1,93 +1,25 @@
 class Cripto
+  attr_accessor :dictionary
 
-  def initialize(string = "")
-    @string = string
+  def initialize(dictionary)
+    self.dictionary = dictionary
   end
+
+  def encrypt(text)
+    process(:[], text)
+  end
+
+  def decrypt(text)
+    process(:key, text)
+  end
+
+  private
   
-  def cripto
-    @string_criptografada = ''
-    @string.each_char do |s|
-      if dicionario[s] == nil
-        @string_criptografada << s
-      else
-        @string_criptografada << dicionario[s]
-      end
+  def process(method, text)
+    processed_text = ""
+    text.each_char do |ch|
+      processed_text << (dictionary.send(method, ch) || ch)
     end
-    @string_criptografada
-  end
-
-  def decript
-    @string_descriptografada = ''
-    @string.each_char do |ch|
-      if dicionario.value? ch
-        dicionario.each_pair do |key,value|
-          @string_descriptografada << key if value == ch
-        end
-      else
-        @string_descriptografada << ch
-      end
-    end
-    @string_descriptografada
-  end
-
-  def dicionario
-    {
-    'a' => 'b',
-    'b' => 'c',
-    'c' => 'd',
-    'd' => 'e',
-    'e' => 'f',
-    'f' => 'g',
-    'g' => 'h',
-    'h' => 'i',
-    'i' => 'j',
-    'j' => 'k',
-    'k' => 'l',
-    'l' => 'm',
-    'm' => 'n',
-    'n' => 'o',
-    'o' => 'p',
-    'p' => 'q',
-    'q' => 'r',
-    'r' => 's',
-    's' => 't',
-    't' => 'u',
-    'u' => 'v',
-    'v' => 'w',
-    'w' => 'x',
-    'x' => 'y',
-    'y' => 'z',
-    'z' => 'a',
-    
-    'A' => 'B',
-    'B' => 'C',
-    'C' => 'D',
-    'D' => 'E',
-    'E' => 'F',
-    'F' => 'G',
-    'G' => 'H',
-    'H' => 'I',
-    'I' => 'J',
-    'J' => 'K',
-    'K' => 'L',
-    'L' => 'M',
-    'M' => 'N',
-    'N' => 'O',
-    'O' => 'P',
-    'P' => 'Q',
-    'Q' => 'R',
-    'R' => 'S',
-    'S' => 'T',
-    'T' => 'U',
-    'U' => 'V',
-    'V' => 'W',
-    'W' => 'X',
-    'X' => 'Y',
-    'Y' => 'Z',
-    'Z' => 'A',
-
-    '.' => ' ',
-    ' ' => '.',
-    }
+    processed_text
   end
 end
