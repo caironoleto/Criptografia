@@ -1,5 +1,4 @@
-require 'lib/cripto.rb'
-require 'spec'
+require 'spec_helper'
 
 describe Cripto do
   before(:each) do
