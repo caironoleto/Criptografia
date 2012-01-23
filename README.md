@@ -118,7 +118,7 @@ class UsersController < ActionController::Base
   def update
     @user = User.find(params[:id])
     
-    @user.slug = Slugify(@user.name)
+    @user.slug = SlugGenerator.new(@user.name).slugify!
     
     # …
   end
